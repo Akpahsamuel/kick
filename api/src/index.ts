@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { Hono } from "hono";
 import { jwt } from "hono/jwt";
 import { cors } from "hono/cors";
@@ -32,7 +33,20 @@ app.get("/", async (c) => {
   });
 });
 
+// For Bun runtime
 export default {
-  port: 3000,
+  port: 3001,
   fetch: app.fetch,
 };
+
+// For Node.js runtime
+if (typeof Bun === "undefined") {
+  (async () => {
+    const { serve } = await import("@hono/node-server");
+    serve({
+      fetch: app.fetch,
+      port: 3001,
+    });
+    console.log("Cell-Fi API server running on http://localhost:3001");
+  })();
+}

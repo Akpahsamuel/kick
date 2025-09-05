@@ -1,13 +1,7 @@
 import { Hono } from "hono";
 import { validator } from "hono/validator";
-import { env } from 'hono/adapter'
-import { db } from "../db";
-import { user } from "../db/schema";
-import { otp } from "../db/schema/otp";
-import { eq } from "drizzle-orm";
 import { sign } from 'hono/jwt';
 import { JWT_SECRET } from "../util/constants";
-import { createSmsSenderService } from '../core/sms/sender';
 import { formatPhoneNumber } from '../util/phoneNumber';
 
 const authRouter = new Hono();
@@ -22,7 +16,7 @@ function createOtpExpiry() {
   return expiresAt;
 }
 
-// Login endpoint
+// Login endpoint (MOCK VERSION - NO DATABASE)
 authRouter.post(
   "/login",
   validator("json", (value, c) => {
@@ -36,47 +30,24 @@ authRouter.post(
     const { phoneNumber } = await c.req.json();
     const formattedPhoneNumber = formatPhoneNumber(phoneNumber);
 
-    const existingUser = await db.query.user.findFirst({
-      where: eq(user.phoneNumber, formattedPhoneNumber),
-    });
+    // Mock: Accept any phone number for demo purposes
+    console.log(`Mock login attempt for: ${formattedPhoneNumber}`);
+    
+    const mockOtpCode = createOtpCode();
+    const mockReference = `mock-ref-${Date.now()}`;
 
-    if (!existingUser) {
-      return c.json({ message: "User not found" }, 404);
-    }
-
-    const [otpRecord] = await db.insert(otp)
-      .values({
-        userId: existingUser.id,
-        code: createOtpCode(),
-        expiresAt: createOtpExpiry(),
-      })
-      .returning({ reference: otp.reference, code: otp.code });
-
-    const { SMS_API_KEY, SMS_BASE_URL, SENDER_MOBILE } = env<{
-      SMS_API_KEY: string,
-      SENDER_MOBILE: string,
-      SMS_BASE_URL: string
-    }>(c);
-
-    const smsSender = createSmsSenderService({
-      apiKey: SMS_API_KEY,
-      defaultSender: SENDER_MOBILE,
-      baseUrl: SMS_BASE_URL,
-    });
-
-    await smsSender.sendCommandResponse(
-      phoneNumber,
-      otpRecord.code,
-    );
+    // Mock: Log the OTP instead of sending SMS
+    console.log(`Mock OTP for ${formattedPhoneNumber}: ${mockOtpCode}`);
 
     return c.json({
-      message: "OTP sent successfully",
-      reference: otpRecord.reference,
+      message: "OTP sent successfully (MOCK)",
+      reference: mockReference,
+      mockOtp: mockOtpCode, // Include in response for demo purposes
     });
   }
 );
 
-// OTP resend endpoint
+// OTP resend endpoint (MOCK VERSION - NO DATABASE)
 authRouter.post(
   "/otp/resend",
   validator("json", (value, c) => {
@@ -89,55 +60,19 @@ authRouter.post(
   async (c) => {
     const { reference } = await c.req.json();
 
-    const otpRecord = await db.query.otp.findFirst({
-      where: eq(otp.reference, reference),
-    });
-
-    if (!otpRecord) {
-      return c.json({ message: "Invalid reference" }, 400);
-    }
-
-    const userRecord = await db.query.user.findFirst({
-      where: eq(user.id, otpRecord.userId),
-    });
-
-    if (!userRecord || !userRecord?.phoneNumber) {
-      return c.json({ message: "User not found" }, 400);
-    }
-
-    const [{ code }] = await db.update(otp)
-      .set({
-        code: createOtpCode(),  
-        expiresAt: createOtpExpiry(),
-      })
-      .where(eq(otp.id, otpRecord.id))
-      .returning({ reference: otp.reference, code: otp.code });
-    
-    const { SMS_API_KEY, SMS_BASE_URL, SENDER_MOBILE } = env<{
-      SMS_API_KEY: string,
-      SENDER_MOBILE: string,
-      SMS_BASE_URL: string
-    }>(c);
-
-    const smsSender = createSmsSenderService({
-      apiKey: SMS_API_KEY,
-      defaultSender: SENDER_MOBILE,
-      baseUrl: SMS_BASE_URL,
-    });
-
-    await smsSender.sendCommandResponse(
-      userRecord.phoneNumber,
-      code,
-    );
+    // Mock: Generate new OTP for demo
+    const mockOtpCode = createOtpCode();
+    console.log(`Mock OTP resend - Reference: ${reference}, New OTP: ${mockOtpCode}`);
     
     return c.json({
-      message: "OTP sent successfully",
-      reference: otpRecord.reference,
+      message: "OTP resent successfully (MOCK)",
+      reference: reference,
+      mockOtp: mockOtpCode, // Include in response for demo purposes
     });
   }
 );
 
-// Verify endpoint
+// Verify endpoint (MOCK VERSION - NO DATABASE)
 authRouter.post(
   "/verify",
   validator("json", (value, c) => {
@@ -150,33 +85,22 @@ authRouter.post(
   async (c) => {
     const { reference, code } = await c.req.json();
 
-    const otpRecord = await db.query.otp.findFirst({
-      where: eq(otp.reference, reference),
-    });
-
-    if (!otpRecord) {
-      return c.json({ message: "Invalid reference" }, 404);
+    // Mock: Accept any 6-digit code for demo purposes
+    console.log(`Mock verify attempt - Reference: ${reference}, Code: ${code}`);
+    
+    if (code.length !== 6) {
+      return c.json({ message: "Invalid code format" }, 400);
     }
 
-    if (new Date() > otpRecord.expiresAt) {
-      await db.delete(otp).where(eq(otp.id, otpRecord.id));
-
-      return c.json({ message: "OTP has expired" }, 400);
-    }
-
-    if (otpRecord.code !== code) {
-      return c.json({ message: "Invalid code" }, 400);
-    }
-
-    await db.delete(otp).where(eq(otp.id, otpRecord.id));
-
+    // Mock: Generate a demo JWT token
     const token = await sign({
-      userId: otpRecord.userId,
+      userId: "mock-user-123",
+      phoneNumber: "+1234567890",
       exp: Math.floor(Date.now() / 1000) + 60 * 60, // Token expires in 1 hour
     }, JWT_SECRET);
 
     return c.json({
-      message: "Successfully verified",
+      message: "Successfully verified (MOCK)",
       token,
     });
   }
