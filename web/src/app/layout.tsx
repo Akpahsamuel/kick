@@ -10,7 +10,7 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "Cell-Fi",
+  title: "Kick",
   description: "Your Financial Bridge, Always Connected.",
 };
 

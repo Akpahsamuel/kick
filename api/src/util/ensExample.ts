@@ -16,7 +16,7 @@ const SEPOLIA_RPC_URL = "https://ethereum-sepolia-rpc.publicnode.com";
 async function example() {
   // Initialize with contract address and provider
   const ensResolver = new ENSResolver(SEPOLIA_RPC_URL);
-  ensResolver.resolveName("biksbiks.cellfi.eth").then((address) => {
+  ensResolver.resolveName("biksbiks.kick.eth").then((address) => {
     console.log("Resolved address:", address);
   });
 }

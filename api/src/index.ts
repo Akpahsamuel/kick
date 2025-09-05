@@ -1,3 +1,4 @@
+
 import "dotenv/config";
 import { Hono } from "hono";
 import { jwt } from "hono/jwt";
@@ -29,7 +30,7 @@ app.route("/sms-webhook", webhook);
 
 app.get("/", async (c) => {
   return c.json({
-    message: "Cell-Fi API",
+    message: "Kick API",
   });
 });
 
@@ -47,6 +48,6 @@ if (typeof Bun === "undefined") {
       fetch: app.fetch,
       port: 3001,
     });
-    console.log("Cell-Fi API server running on http://localhost:3001");
+    console.log("Kick API server running on http://localhost:3001");
   })();
 }

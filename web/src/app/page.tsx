@@ -10,7 +10,7 @@ export default function Home() {
         USDC digital currency - no internet required.</div>
         <div className="text-white relative z-40 w-[150px]">
         <Image src="/logo.svg" width={250} height={55} className="w-[250px] h-auto mb-2" alt="logo" />
-        <h3 className="font-bold mb-10 text-center tracking-[5px]">CellFi</h3>
+        <h3 className="font-bold mb-10 text-center tracking-[5px]">Kick</h3>
         <Link href="/login" className="button button--primary whitespace-nowrap !px-10">Login &nbsp;→</Link>
         </div>
       </div>

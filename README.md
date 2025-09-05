@@ -1,15 +1,15 @@
-# Cell-Fi 📱💰
+# Kick 📱💰
 
 **Bridging Traditional Phone Numbers with Decentralized Finance**
 
-Cell-Fi is a revolutionary blockchain-based financial platform that makes cryptocurrency transactions as simple as sending a text message. By linking phone numbers directly to ENS (Ethereum Name Service) domains and crypto wallets, Cell-Fi eliminates the complexity of traditional crypto interactions.
+Kick is a revolutionary blockchain-based financial platform that makes cryptocurrency transactions as simple as sending a text message. By linking phone numbers directly to ENS (Ethereum Name Service) domains and crypto wallets, Kick eliminates the complexity of traditional crypto interactions.
 
-## 🎯 What is Cell-Fi?
+## 🎯 What is Kick?
 
-Cell-Fi transforms how people interact with cryptocurrency by:
+Kick transforms how people interact with cryptocurrency by:
 
 - **📞 Phone-to-Wallet Mapping**: Send crypto using phone numbers instead of complex wallet addresses
-- **🏷️ ENS Integration**: Each user gets an ENS subdomain (e.g., `5551234567.cellfi.eth`)  
+- **🏷️ ENS Integration**: Each user gets an ENS subdomain (e.g., `5551234567.kick.eth`)  
 - **⚡ Layer 2 Technology**: Fast, cheap transactions using L2 blockchain infrastructure
 - **🛡️ Social Security**: Built-in approval and nomination systems for enhanced security
 - **💸 User-Friendly Payments**: Venmo-like experience for crypto transactions
@@ -42,7 +42,7 @@ Cell-Fi transforms how people interact with cryptocurrency by:
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd cell-fi
+   cd kick
    ```
 
 2. **Install dependencies**
@@ -111,7 +111,7 @@ The current implementation runs in **demo mode** with mock authentication:
 
 ### 🌐 ENS Integration
 - Automatic ENS subdomain creation
-- Phone-to-ENS mapping (e.g., `+1234567890.cellfi.eth`)
+- Phone-to-ENS mapping (e.g., `+1234567890.kick.eth`)
 - Cross-chain name resolution
 
 ## 🛠️ Technology Stack
@@ -125,14 +125,14 @@ The current implementation runs in **demo mode** with mock authentication:
 
 ## 🌍 Supported Networks
 
-Cell-Fi leverages the Durin framework deployed on:
+Kick leverages the Durin framework deployed on:
 
 - **Mainnets**: Base, Arbitrum, Optimism, Scroll, Linea
 - **Testnets**: Base Sepolia, Arbitrum Sepolia, Optimism Sepolia, etc.
 
 ## 🔮 Vision
 
-Cell-Fi aims to make cryptocurrency as accessible as traditional payment apps like Venmo or Cash App, but with the benefits of decentralized finance:
+Kick aims to make cryptocurrency as accessible as traditional payment apps like Venmo or Cash App, but with the benefits of decentralized finance:
 
 - **No more copying wallet addresses**
 - **Intuitive phone number-based transactions**  
